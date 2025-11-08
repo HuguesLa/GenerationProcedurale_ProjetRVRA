@@ -1,0 +1,93 @@
+<set>
+  <tiles>
+<tile name="Tiles/Corner_L" symmetry="L" weight="1,0"/>
+<tile name="Tiles/Wall_I" symmetry="I" weight="1,0"/>
+<tile name="Tiles/Corridor_I" symmetry="I" weight="1,0"/>
+<tile name="Tiles/DeadEnd_X" symmetry="X" weight="1,0"/>
+<tile name="Tiles/Empty" symmetry="X" weight="1,0"/>
+<tile name="Tiles/River" symmetry="X" weight="1,0"/>
+<tile name="Tiles/Bridge_I" symmetry="I" weight="1,0"/>
+	</tiles>
+<neighbors>  <neighbor left="Tiles/Corner_L 0" right="Tiles/Corridor_I 3"/>
+  <neighbor left="Tiles/Corner_L 1" right="Tiles/Wall_I 0"/>
+  <neighbor left="Tiles/Corridor_I 3" right="Tiles/Wall_I 2"/>
+  <neighbor left="Tiles/Corridor_I 0" right="Tiles/Corridor_I 0"/>
+  <neighbor left="Tiles/Wall_I 2" right="Tiles/Corner_L 3"/>
+  <neighbor left="Tiles/Wall_I 3" right="Tiles/Corner_L 0"/>
+  <neighbor left="Tiles/Corner_L 3" right="Tiles/Wall_I 2"/>
+  <neighbor left="Tiles/Corner_L 0" right="Tiles/Wall_I 2"/>
+  <neighbor left="Tiles/Wall_I 2" right="Tiles/Corner_L 0"/>
+  <neighbor left="Tiles/Wall_I 3" right="Tiles/Empty 1"/>
+  <neighbor left="Tiles/Corner_L 0" right="Tiles/Corner_L 1"/>
+  <neighbor left="Tiles/Corner_L 1" right="Tiles/Empty 1"/>
+  <neighbor left="Tiles/Corner_L 1" right="Tiles/Wall_I 2"/>
+  <neighbor left="Tiles/Corner_L 2" right="Tiles/Wall_I 2"/>
+  <neighbor left="Tiles/Wall_I 2" right="Tiles/Wall_I 2"/>
+  <neighbor left="Tiles/Wall_I 3" right="Tiles/Corner_L 1"/>
+  <neighbor left="Tiles/Wall_I 3" right="Tiles/Corridor_I 3"/>
+  <neighbor left="Tiles/Wall_I 0" right="Tiles/Wall_I 0"/>
+  <neighbor left="Tiles/Corridor_I 3" right="Tiles/Corner_L 3"/>
+  <neighbor left="Tiles/Corridor_I 0" right="Tiles/Empty 1"/>
+  <neighbor left="Tiles/Corner_L 3" right="Tiles/Wall_I 1"/>
+  <neighbor left="Tiles/Corner_L 0" right="Tiles/Empty 1"/>
+  <neighbor left="Tiles/Wall_I 1" right="Tiles/Empty 0"/>
+  <neighbor left="Tiles/Wall_I 2" right="Tiles/Empty 1"/>
+  <neighbor left="Tiles/Empty 0" right="Tiles/Empty 0"/>
+  <neighbor left="Tiles/Empty 1" right="Tiles/Empty 1"/>
+  <neighbor left="Tiles/Empty 0" right="Tiles/Wall_I 1"/>
+  <neighbor left="Tiles/Empty 1" right="Tiles/Corner_L 1"/>
+  <neighbor left="Tiles/Empty 0" right="Tiles/Corner_L 0"/>
+  <neighbor left="Tiles/Corner_L 0" right="Tiles/Wall_I 1"/>
+  <neighbor left="Tiles/Corner_L 1" right="Tiles/DeadEnd_X 3"/>
+  <neighbor left="Tiles/Wall_I 2" right="Tiles/Wall_I 2"/>
+  <neighbor left="Tiles/Wall_I 3" right="Tiles/Empty 0"/>
+  <neighbor left="Tiles/Empty 1" right="Tiles/Corner_L 2"/>
+  <neighbor left="Tiles/Empty 1" right="Tiles/Wall_I 3"/>
+  <neighbor left="Tiles/Corner_L 0" right="Tiles/Empty 0"/>
+  <neighbor left="Tiles/Corner_L 1" right="Tiles/Corner_L 1"/>
+  <neighbor left="Tiles/Empty 0" right="Tiles/DeadEnd_X 2"/>
+  <neighbor left="Tiles/DeadEnd_X 2" right="Tiles/Wall_I 1"/>
+  <neighbor left="Tiles/DeadEnd_X 3" right="Tiles/Empty 1"/>
+  <neighbor left="Tiles/Wall_I 3" right="Tiles/Corner_L 1"/>
+  <neighbor left="Tiles/Wall_I 0" right="Tiles/Corner_L 2"/>
+  <neighbor left="Tiles/Corner_L 1" right="Tiles/Corner_L 0"/>
+  <neighbor left="Tiles/Corner_L 2" right="Tiles/Wall_I 1"/>
+  <neighbor left="Tiles/Corner_L 1" right="Tiles/Wall_I 1"/>
+  <neighbor left="Tiles/Empty 0" right="Tiles/Wall_I 2"/>
+  <neighbor left="Tiles/Empty 1" right="Tiles/Corridor_I 0"/>
+  <neighbor left="Tiles/Wall_I 3" right="Tiles/Wall_I 1"/>
+  <neighbor left="Tiles/Empty 1" right="Tiles/Wall_I 1"/>
+  <neighbor left="Tiles/Empty 1" right="Tiles/DeadEnd_X 2"/>
+  <neighbor left="Tiles/Wall_I 2" right="Tiles/Corner_L 3"/>
+  <neighbor left="Tiles/Corner_L 1" right="Tiles/Wall_I 0"/>
+  <neighbor left="Tiles/Corner_L 2" right="Tiles/River 1"/>
+  <neighbor left="Tiles/Wall_I 0" right="Tiles/Wall_I 0"/>
+  <neighbor left="Tiles/Wall_I 1" right="Tiles/River 1"/>
+  <neighbor left="Tiles/Wall_I 0" right="Tiles/Corridor_I 3"/>
+  <neighbor left="Tiles/Corridor_I 3" right="Tiles/Wall_I 0"/>
+  <neighbor left="Tiles/Corridor_I 0" right="Tiles/Bridge_I 1"/>
+  <neighbor left="Tiles/Wall_I 0" right="Tiles/DeadEnd_X 1"/>
+  <neighbor left="Tiles/DeadEnd_X 1" right="Tiles/Corner_L 2"/>
+  <neighbor left="Tiles/DeadEnd_X 2" right="Tiles/River 1"/>
+  <neighbor left="Tiles/Corner_L 3" right="Tiles/River 1"/>
+  <neighbor left="Tiles/River 0" right="Tiles/River 0"/>
+  <neighbor left="Tiles/River 1" right="Tiles/Corner_L 1"/>
+  <neighbor left="Tiles/River 0" right="Tiles/Bridge_I 0"/>
+  <neighbor left="Tiles/River 1" right="Tiles/Wall_I 3"/>
+  <neighbor left="Tiles/Bridge_I 0" right="Tiles/River 0"/>
+  <neighbor left="Tiles/Bridge_I 1" right="Tiles/Corridor_I 0"/>
+  <neighbor left="Tiles/River 1" right="Tiles/Corner_L 0"/>
+  <neighbor left="Tiles/Corner_L 0" right="Tiles/Corner_L 0"/>
+  <neighbor left="Tiles/Corner_L 0" right="Tiles/Wall_I 2"/>
+  <neighbor left="Tiles/Wall_I 2" right="Tiles/Corridor_I 3"/>
+  <neighbor left="Tiles/Wall_I 3" right="Tiles/DeadEnd_X 1"/>
+  <neighbor left="Tiles/Empty 1" right="Tiles/DeadEnd_X 1"/>
+  <neighbor left="Tiles/Empty 0" right="Tiles/DeadEnd_X 0"/>
+  <neighbor left="Tiles/DeadEnd_X 0" right="Tiles/Empty 0"/>
+  <neighbor left="Tiles/DeadEnd_X 1" right="Tiles/Empty 1"/>
+  <neighbor left="Tiles/Wall_I 3" right="Tiles/DeadEnd_X 0"/>
+  <neighbor left="Tiles/DeadEnd_X 1" right="Tiles/Wall_I 1"/>
+  <neighbor left="Tiles/DeadEnd_X 0" right="Tiles/Wall_I 1"/>
+  <neighbor left="Tiles/Wall_I 0" right="Tiles/Corner_L 2"/>
+	</neighbors>
+</set>

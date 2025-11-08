@@ -1,0 +1,66 @@
+# === Unity ===
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# === Visual Studio / Rider ===
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# === macOS ===
+.DS_Store
+*.swp
+*~.nib
+
+# === Windows ===
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# === JetBrains Rider ===
+.idea/
+*.iml
+
+# === VS Code ===
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# === Unity Package Manager ===
+/[Pp]ackages/manifest.json
+/[Pp]ackages/packages-lock.json
+
+# === Builds ===
+/[Bb]uild/
+/[Bb]uilds/
+/[Aa]ssets/[Ss]treamingAssets/
+
+# === Autres ===
+*.apk
+*.aab
+*.unitypackage
+*.zip
+*.rar
+
+# === Exceptions utiles (à garder) ===
+!/Assets/
+!/ProjectSettings/
+!/Packages/
