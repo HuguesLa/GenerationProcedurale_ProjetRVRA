@@ -4,29 +4,32 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Xml;
 using System.IO;
-using System.Linq;
 using TMPro;
 
 public class VRWFCControl : MonoBehaviour
 {
     [Header("UI References")]
-    public ScrollRect scrollView; // Le ScrollView contenant la liste
-    public GameObject tileRowPrefab; // Prefab de ligne (TileRow.prefab)
-    public Button regenerateButton; // Bouton "Régénérer"
-    public TextAsset xmlAsset; // Assign ton XML (Trainer.xml) dans l'Inspector
+    public ScrollRect scrollView;
+    public GameObject tileRowPrefab;
+    public Button regenerateButton;
+    public TextAsset xmlAsset;
 
     [Header("WFC Reference")]
-    public SimpleTiledWFC wfcGenerator; // Drag ton GameObject avec SimpleTiledWFC
+    public SimpleTiledWFC wfcGenerator;
 
-    private List<TileInfo> tiles = new List<TileInfo>(); // Stocke nom, weight actuel
-    private string xmlPath; // Chemin du fichier XML (ex. Assets/Resources/Trainer.xml)
+    private List<TileInfo> tiles = new List<TileInfo>();
+    private string xmlPath;
     private XmlDocument xmlDoc;
+
+    // Pour sauvegarde différée
+    private Coroutine saveCoroutine;
+    private const float SAVE_DELAY = 0.5f;
 
     [System.Serializable]
     public class TileInfo
     {
         public string name;
-        public string weight; // Format "X,Y"
+        public string weight;
         public Slider weightSlider;
         public TMP_Text nameText;
         public TMP_Text weightText;
@@ -35,18 +38,17 @@ public class VRWFCControl : MonoBehaviour
 
     void Start()
     {
-        if (xmlAsset == null) 
+        if (xmlAsset == null)
         {
             Debug.LogError("Assign le XML dans l'Inspector !");
             return;
         }
 
-        xmlPath = Path.Combine(Application.dataPath, "Resources", xmlAsset.name + ".xml"); // Ajuste si chemin différent
+        xmlPath = Path.Combine(Application.dataPath, "Resources", xmlAsset.name + ".xml");
         LoadAndParseXML();
 
-        regenerateButton.onClick.AddListener(RegenerateEnvironment);
-
-        // Écoute les changements sur les sliders (dans BuildUI)
+        if (regenerateButton != null)
+            regenerateButton.onClick.AddListener(RegenerateEnvironment);
     }
 
     void LoadAndParseXML()
@@ -54,7 +56,7 @@ public class VRWFCControl : MonoBehaviour
         xmlDoc = new XmlDocument();
         xmlDoc.LoadXml(xmlAsset.text);
 
-        // Parse les <tile> dans <tiles>
+        tiles.Clear();
         XmlNodeList tileNodes = xmlDoc.SelectNodes("//tile");
         foreach (XmlNode node in tileNodes)
         {
@@ -77,7 +79,8 @@ public class VRWFCControl : MonoBehaviour
         }
 
         Transform content = scrollView.content;
-        foreach (Transform child in content) Destroy(child.gameObject);
+        foreach (Transform child in content)
+            Destroy(child.gameObject);
 
         foreach (TileInfo tile in tiles)
         {
@@ -89,22 +92,34 @@ public class VRWFCControl : MonoBehaviour
             if (!nameText || !weightSlider || !weightText)
             {
                 Debug.LogError("Prefab TileRow mal configuré ! Vérifie les noms et composants.");
+                Destroy(row);
                 continue;
             }
 
+            // Configuration du slider
             nameText.text = tile.name;
             float mainWeight = float.Parse(tile.weight.Split(',')[0]);
+            weightSlider.wholeNumbers = true;
+            weightSlider.minValue = 0;
+            weightSlider.maxValue = 20;
             weightSlider.value = mainWeight;
             weightText.text = tile.weight;
 
+            // Écouteur avec sauvegarde différée
             weightSlider.onValueChanged.AddListener((float v) =>
             {
-                tile.weight = Mathf.RoundToInt(v) + ",0";
+                int newWeight = Mathf.RoundToInt(v);
+                tile.weight = newWeight + ",0";
                 weightText.text = tile.weight;
                 UpdateXML();
-                SaveXML();
+
+                // Sauvegarde différée
+                if (saveCoroutine != null)
+                    StopCoroutine(saveCoroutine);
+                saveCoroutine = StartCoroutine(DelayedSave());
             });
 
+            // Stockage des références
             tile.nameText = nameText;
             tile.weightSlider = weightSlider;
             tile.weightText = weightText;
@@ -112,45 +127,40 @@ public class VRWFCControl : MonoBehaviour
         }
     }
 
-    void OnWeightChanged(TileInfo tile, float newValue)
-    {
-        // Update le weight dans la liste (format "X,0" en gardant Y=0 pour simplicité)
-        tile.weight = Mathf.RoundToInt(newValue).ToString() + ",0";
-        tile.weightText.text = tile.weight;
-
-        // Update XML et save
-        UpdateXML();
-        SaveXML();
-    }
-
     void UpdateXML()
     {
-        // Met à jour tous les <tile> avec les nouveaux weights
         XmlNodeList tileNodes = xmlDoc.SelectNodes("//tile");
-        int index = 0;
-        foreach (XmlNode node in tileNodes)
+        for (int i = 0; i < tileNodes.Count && i < tiles.Count; i++)
         {
-            if (index < tiles.Count)
+            XmlAttribute weightAttr = tileNodes[i].Attributes["weight"];
+            if (weightAttr != null)
             {
-                XmlAttribute weightAttr = node.Attributes["weight"];
-                if (weightAttr != null)
-                {
-                    weightAttr.Value = tiles[index].weight;
-                }
-                index++;
+                weightAttr.Value = tiles[i].weight;
             }
         }
     }
 
+    private IEnumerator DelayedSave()
+    {
+        yield return new WaitForSeconds(SAVE_DELAY);
+        SaveXML();
+    }
+
     void SaveXML()
     {
-        xmlDoc.Save(xmlPath);
-        Debug.Log("XML sauvegardé : " + xmlPath);
+        try
+        {
+            xmlDoc.Save(xmlPath);
+            Debug.Log("XML sauvegardé : " + xmlPath);
 
-        // Recharge l'asset si besoin (en éditeur, refresh ; en build, recharge via Resources.LoadTextAsset)
 #if UNITY_EDITOR
-        UnityEditor.AssetDatabase.Refresh();
+            UnityEditor.AssetDatabase.Refresh();
 #endif
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Erreur sauvegarde XML : " + e.Message);
+        }
     }
 
     void RegenerateEnvironment()
@@ -161,23 +171,36 @@ public class VRWFCControl : MonoBehaviour
             return;
         }
 
-        // Force le reload du XML mis à jour
-        wfcGenerator.xml = (TextAsset)Resources.Load(xmlAsset.name, typeof(TextAsset)); // Recharge
+        // Recharge le XML modifié
+        TextAsset updatedXml = Resources.Load<TextAsset>(xmlAsset.name);
+        if (updatedXml != null)
+            wfcGenerator.xml = updatedXml;
 
-        // Détruit l'ancien output
+        // Nettoie l'ancien output
         if (wfcGenerator.output != null)
         {
             foreach (Transform child in wfcGenerator.output.transform)
             {
-                if (Application.isPlaying) Destroy(child.gameObject);
-                else DestroyImmediate(child.gameObject);
+                if (Application.isPlaying)
+                    Destroy(child.gameObject);
+                else
+                    DestroyImmediate(child.gameObject);
             }
         }
 
-        // Relance la génération
+        // Régénère
         wfcGenerator.Generate();
         wfcGenerator.Run();
 
         Debug.Log("Environnement régénéré !");
+    }
+
+    // Optionnel : rechargement manuel avec R
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            LoadAndParseXML();
+        }
     }
 }
